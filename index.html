@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>AJAX Tutorial</title>
+	<link rel="stylesheet" type="text/css" href="css/1.main.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+	
+</head>
+<body>
+	<h1>jQuery Ajax Tutorial</h1>
+	<h2>Friend Add</h2>
+	<ul id="friends">
+	</ul>
+	<h4>Add a Friend</h4>
+	<p>Friend Name: <input type="text" id="name"></p>
+	<p>Friend Age: <input type="text" id="age"></p>
+	<button id="add-friend">Add!</button>
+
+	<script type="text/javascript">
+	var $friends = $('#friends');
+	var $name = $('#name');
+	var $age = $('#age');
+	var $addFriend = $('#add-friend');
+	$(document).ready(function(){
+		$.ajax({
+			type: 'GET',
+			url: 'http://rest.learncode.academy/api/james/friends',
+			success: function(friends) {
+				//console.log(friends[0].name) //now I can see it in the console log
+				$.each(friends, function(i, friend){
+					//console.log(friend.name +":" + friend.age);
+					$friends.append('<li>' + friend.name +  ": " + friend.age + '</li>');
+				});
+			},
+
+			error: function(){
+				alert('error loading friends');
+			}
+		});
+
+
+		$addFriend.on('click', function(){
+			var friend = {
+				name: $name.val(),
+				age:  $age.val()
+			};
+
+			$.ajax({
+				type: 'POST',
+				url: 'http://rest.learncode.academy/api/james/friends',
+				data: friend,
+				success: function(){
+					$friends.append('<li>' + friend.name +  ": " + friend.age + '</li>');
+				},
+
+				error: function(){
+					alert('cannot post new friend');
+				}
+			});
+
+
+		});
+
+	});
+</script>
+
+<!--js files-->
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js"></script>
+</body>
+</html>
